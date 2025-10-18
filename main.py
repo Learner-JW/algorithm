@@ -1,16 +1,33 @@
-# 샘플 Python 스크립트입니다.
+import sys
+import heapq
+input = sys.stdin.readline
 
-# Shift+F10을(를) 눌러 실행하거나 내 코드로 바꿉니다.
-# 클래스, 파일, 도구 창, 액션 및 설정을 어디서나 검색하려면 Shift 두 번을(를) 누릅니다.
+n,m,x = map(int,input().split())
+G = [[] for i in range(n+1)]
 
+for i in range(m):
+    s,e,t = map(int,input().split())
+    G[s].append((e,t))
 
-def print_hi(name):
-    # 스크립트를 디버그하려면 하단 코드 줄의 중단점을 사용합니다.
-    print(f'Hi, {name}')  # 중단점을 전환하려면 Ctrl+F8을(를) 누릅니다.
-
-
-# 스크립트를 실행하려면 여백의 녹색 버튼을 누릅니다.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# https://www.jetbrains.com/help/pycharm/에서 PyCharm 도움말 참조
+def distance(x):
+    global n
+    queue = []
+    dist = [float('inf') for i in range(n + 1)]
+    heapq.heappush(queue,(0,x))
+    dist[x]=0
+    while queue:
+        w,cn = heapq.heappop(queue)
+        for nn,nw in G[cn]:
+            if nw+dist[cn] < dist[nn]:
+                dist[nn] = nw+dist[cn]
+                heapq.heappush(queue,(dist[nn],nn))
+    return dist
+ans = 0
+d = distance(x)
+for i in range(1,n+1):
+    if i == x:
+        continue
+    p = distance(i)
+    if d[i]+p[x] > ans:
+        ans = d[i]+p[x]
+print(ans)
