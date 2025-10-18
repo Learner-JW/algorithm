@@ -31,3 +31,4 @@ for i in range(1,n+1):
     if d[i]+p[x] > ans:
         ans = d[i]+p[x]
 print(ans)
+# 백준 파티 문제
